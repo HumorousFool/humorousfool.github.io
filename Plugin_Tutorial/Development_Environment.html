@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<title>Plugin Tutorial - Development Environment</title>
+<meta charset="utf-8">
+<link href="../style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../syntax_highlight.js"></script>
+</head>
+
+<body style="background-color: #dbdbdb">
+<nav>
+  <ul class="navlist">
+	  <li><a class="navitem" href="../index.html">Home</a></li>
+	  <li class="active"><a href="Introduction.html">Plugin Tutorial</a></li>
+	  <li class="navitem"><a href="../contact.html">Contact</a></li>
+	</ul>
+</nav>
+	
+<div class="sidenav">
+  <a href="Introduction.html">Introduction</a>
+  <a class="sideactive" href="Development_Environment.html">Development Environment</a>
+  <a href="First_Plugin.html">Your First Plugin</a>
+  <a href="Events.html">Events</a>
+</div>
+	
+<main class="sidemain">
+	<h1>Development Evironment</h1>
+	This tutorial will go through how to set up Java, a Minecraft server and an IDE for developing your plugins.
+	<h3>Java Setup</h3>
+	<p>You can download a pre-build OpenJDK installer from <a href="https://adoptium.net/">https://adoptium.net/</a>. OpenJDK is an open source version of the JDK you would find on oracle.com or java.com. It is maintained by Oracle and is what Oracle's JDK is based off of. I am using Java 16 but most other versions should work perfectly fine. Simply follow the installer's instructions.</p>
+	<h3>Spigot Setup</h3>
+	<p>Most Minecraft servers running plugins use Spigot, which is a fork of Bukkit, or Paper, which is a fork of Spigot with performance improvements. Plugins made with any of these APIs are generally compatible with eachother except for a few very specific cases.</p>
+	<p>We're going to build Spigot. Download Spigot's buildtools from <a href="https://www.spigotmc.org/wiki/buildtools/#running-buildtools">here</a>. I am going to walk through how to run it on Windows but if you are on another platform there are instructions on the page I just linked. Once you have downloaded it, move the BuildTools jar into its own folder and copy the folder's location. Now open command prompt and type <a class="hli">cd &lt;Your folder's location here&gt;</a> and press enter. Your command prompt is now open inside your BuildTools' directory. Now run the command <a class="hli">java -jar BuildTools.jar --rev &lt;Minecraft version&gt;</a>. You can also put "latest" instead of a minecraft version to build the latest version. The argument. Using buildtools to build spigot is also necessary if you want to access Minecraft server code directly.</p>
+	<h3>IDE Setup</h3>
+	<p>I highly recommend using IntelliJ IDEA is your IDE. Eclipse, in my opinion is completely obsolete and should be avoided by beginners as it makes relatively simple tasks such as setting up maven a nightmare for new programmers. You can download IntelliJ IDEA Community Edition for free from <a href="https://www.jetbrains.com/idea/download/">here</a>. Simply follow the installer's instructions to continue.</p>
+	<h3>Workspace Setup</h3>
+	<p>There is a plugin for IntelliJ Idea called "Minecraft Development" that will set up your workspace for you. I will be using this plugin as it is helpful in many ways. To enable this plugin, go to the Plugins tab from the main menu and search for it and click "Install". Now that it is installed, go back to the Projects tab and select "New Project". Click on "Minecraft" and select the Java version you want to use. You may have to add a JDK if none show up. To do this, click on "Add JDK" and select your jdk folder. The folder's usual location is <a class="hli">C:\Program Files\Eclipse Foundation</a> if you used the installer I linked above or <a class="hli">C:\Program Files\Java</a>. You can also download JDK versions directly from IntelliJ IDEA. Once your JDK is set up, Select "Spigot Plugin" and click continue. I will be naming mine "TutorialPlugin" but you can name yours whatever you want. Then click finish to continue.</p>
+	<p>The GroupID is your plugin's package name, the package is commonly <a class="hli">com.yourname</a> if you don't own that domain you can just put <a class="hli">yourname"</a> or if you have a domain that you prefer to use you can put that instead. I like to use <a class="hli">io.github.humorousfool</a>. The ArtifactID is usually your plugin's name I will name mine TutorialPlugin. The version is your plugin's current version. I will leave my version as the default. Click next to continue.</p>
+	<p>The Plugin Name is your plugin's name. The main class name is the location of the plugin's main class. It is most commonly set to <a class="hli">groupid.artifactid.ArtifactID</a>. It will be filled in by default so I will keep it as such. The settings below are optional and are mostly cosmetic. I will add a quick description, my name inside the Authors field, this website inside the website field and I will leave the rest blank for now. Finally you can name your project, I will name mine the same as my plugin to keep everything consistent.</p>
+	<p>Inside your new project there should be a pom.xml file. This file contains information about your project and its dependencies. Inside it, you should see something like:</p>
+	<code class="code-xml">&lt;repository&gt;
+	&lt;id&gt;spigotmc-repo&lt;/id&gt;
+	&lt;url&gt;https://hub.spigotmc.org/nexus/content/repositories/snapshots/&lt;/url&gt;
+&lt;/repository&gt;</code>
+	<p>This repository houses the spigot API online. Using maven to manage dependencies in this way allows others to easily download and build your project from github for example. The spigot dependency itself should look something like this:</p>
+	<code class="code-xml">&lt;dependency&gt;
+	&lt;groupId&gt;org.spigotmc&lt;/groupId&gt;
+	&lt;artifactId&gt;spigot-api&lt;/artifactId&gt;
+	&lt;version&gt;1.17.1-R0.1-SNAPSHOT&lt;/version&gt;
+	&lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</code>
+	<p>The version will be set to the latest version by default but you can open the repository's url to see a list of all the versions and write the version of your choice instead. If you change spigot versions you will also need to change the api-version inside your plugin.yml file which has also been automatically generated by the Minecraft Development IDE plugin. The plugin.yml file holds information about your plugin for the server to access.</p>
+	<p>You should now be able to build your plugin. To test this, open the maven tab on the right of your IDE and click the "Execute Maven Goal" button. it looks like a big lowercase m. It should open a list of commands. Type "mvn clean install" and press enter. If you get no errors then you have successfuly compiled your plugin.</p>
+	<h3>Server Setup</h3>
+	<p>A plugin is useless without a server to run it on. To run a server you will need a server jar file. Go back to your BuildTools folder and drag your spigot jar file into a new folder. I like to rename it to spigot.jar to make updating easier.</p>
+</main>
+</body>
+</html>
